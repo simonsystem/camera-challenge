@@ -10,7 +10,7 @@ matter for the evaluation insofar as e. g. adding buggy external
 dependencies will also affect the stability of your code.
 
 ## The fronted
-A layout idea for the frontend can be found [here](https://marvelapp.com/project/3366817/).
+A layout idea for the frontend can be found [here](https://marvelapp.com/44c8gie/).
 
 ## The backend
 The backend should send an email with the picture attached as a PDF to `coding-challenge@mieterengel.de`.
