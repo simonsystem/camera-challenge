@@ -4,10 +4,10 @@ Welcome to the MieterEngel coding challenge! Your mission, should
 you accept it, is to build a page that our customers can use
 to take a picture of a page with their mobile phone and send the picture
 to us via email.
-For the frontend part of this work please use React, every other decision
-about which frameworks you use is up to you. The choice will only
-matter for the evaluation insofar as e. g. adding buggy external
-dependencies will also affect the stability of your code.
+
+## Requirements
+Please code the complete assignment in **TypeScript** and use **React** for front-end. 
+Rest choices, including 3-rd party libraries, are yours. 
 
 ## The fronted
 A layout idea for the frontend can be found [here](https://marvelapp.com/44c8gie/).
