@@ -11,6 +11,7 @@
 # Production files
 /build
 /dist
+/web
 
 # Debug logs
 npm-debug.log*
