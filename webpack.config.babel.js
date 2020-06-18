@@ -5,6 +5,7 @@ import nodeExternals from 'webpack-node-externals';
 import NodemonPlugin from 'nodemon-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackTemplate from 'html-webpack-template';
 
 export default (env = {}) => ({
   mode: 'none',
@@ -20,9 +21,15 @@ export default (env = {}) => ({
     }],
   },
   entry: {
-    index: [!env.production && 'source-map-support/register', '@babel/polyfill', 'promise-polyfill/src/polyfill', './src/index'].filter(x => x)
+    index: [!env.production && 'source-map-support/register', '@babel/polyfill', 'promise-polyfill/dist/polyfill', './src/index'].filter(x => x)
   },
   devtool: 'source-map',
+  devServer: {
+    port: 8080,
+    proxy: {
+      '/': 'http://localhost:3000/'
+    }
+  },
   optimization: {
     minimize: !!env.production,
     minimizer: [
@@ -34,7 +41,11 @@ export default (env = {}) => ({
     ].filter(x => x),
   },
   plugins: [
-    env.web && new HtmlWebpackPlugin(),
+    env.web && new HtmlWebpackPlugin({
+      template: HtmlWebpackTemplate,
+      appMountId: 'app',
+      title: 'Camera Challenge',
+    }),
     ! env.web && new NodemonPlugin(),
   ].filter(x => x),
   output: {
