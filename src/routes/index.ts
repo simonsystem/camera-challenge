@@ -5,7 +5,5 @@ import upload from './upload';
 export default () => {
   const app = express();
   const port = process.env.NODE_PORT;
-  app.use('/', upload);
-  app.listen(port, () => console.info(`Server listening on port ${port}!`));
+  app.use('/', upload).listen(port, () => console.info(`Server listening on port ${port}!`));
 };
-  
