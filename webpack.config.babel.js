@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import { DefinePlugin, ProvidePlugin } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
@@ -6,29 +5,39 @@ import NodemonPlugin from 'nodemon-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackTemplate from 'html-webpack-template';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 
 export default (env = {}) => ({
   mode: 'none',
   module: {
     rules: [{
       test: /\.tsx?$/,
-      use: [{
-        loader: 'awesome-typescript-loader',
-      }],
+      use: [{ loader: 'awesome-typescript-loader' }],
       include: [
         /src/,
+      ],
+    }, {
+      test: /\.s?css$/,
+      use: [
+        { loader: MiniCssExtractPlugin.loader },
+        { loader: 'css-loader' },
       ],
     }],
   },
   entry: {
-    index: [!env.production && 'source-map-support/register', '@babel/polyfill', 'promise-polyfill/dist/polyfill', './src/index'].filter(x => x)
+    index: [
+      !env.production && 'source-map-support/register',
+      !env.production && !env.web && 'dotenv/config',
+      '@babel/polyfill',
+      'promise-polyfill/dist/polyfill',
+      env.web && './src/style',
+      './src/index',
+    ].filter(x => x)
   },
-  devtool: 'source-map',
+  devtool: !env.production && 'source-map',
   devServer: {
-    port: 8080,
-    proxy: {
-      '/': 'http://localhost:3000/'
-    }
+    proxy: { '/': 'http://localhost:3000/' },
   },
   optimization: {
     minimize: !!env.production,
@@ -38,6 +47,9 @@ export default (env = {}) => ({
         parallel: true,
         sourceMap: false, // Must be set to true if using source-maps in production
       }),
+      env.production && new OptimizeCSSAssetsPlugin({
+        canPrint: true,
+      }),
     ].filter(x => x),
   },
   plugins: [
@@ -45,7 +57,19 @@ export default (env = {}) => ({
       template: HtmlWebpackTemplate,
       appMountId: 'app',
       title: 'Camera Challenge',
+      mobile: true,
+      lang: 'de-DE',
+      inject: false,
+      minify: env.production && {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true
+      }
     }),
+    env.web && new MiniCssExtractPlugin(),
     ! env.web && new NodemonPlugin(),
   ].filter(x => x),
   output: {
@@ -60,6 +84,7 @@ export default (env = {}) => ({
       '.tsx',
       '.ts',
       '.js',
+      '.css',
     ],
   },
   target: env.web ? 'web' : 'node',
