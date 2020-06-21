@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App matches snapshot 1`] = `
+Array [
+  <div
+    style={
+      Object {
+        "margin": "-10px",
+      }
+    }
+  >
+    <video
+      autoPlay={true}
+      muted={true}
+      playsInline={true}
+      style={
+        Object {
+          "filter": "blur(10px) grayscale(0.5)",
+          "objectFit": "cover",
+        }
+      }
+    />
+  </div>,
+  <div>
+    <video
+      autoPlay={true}
+      muted={true}
+      playsInline={true}
+      style={Object {}}
+    />
+  </div>,
+  <div
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flexDirection": "column-reverse",
+      }
+    }
+  >
+    <button
+      className="snapshot-btn"
+      onClick={[Function]}
+    />
+    <pre>
+      
+    </pre>
+  </div>,
+]
+`;

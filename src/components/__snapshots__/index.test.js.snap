@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default function calls ReactDOM.render 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      <App />,
+      null,
+      [Function],
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
