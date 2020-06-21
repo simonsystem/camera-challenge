@@ -8,8 +8,10 @@ import HtmlWebpackTemplate from 'html-webpack-template';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 
-export default (env = {}) => ({
-  mode: 'none',
+
+// This is a combined webpack config which can handle 4 different config modes
+export default (env = { production: false, web: false }) => ({
+  mode: 'none', // ignore webpacks development/production defaults
   module: {
     rules: [{
       test: /\.tsx?$/,
@@ -27,13 +29,16 @@ export default (env = {}) => ({
   },
   entry: {
     index: [
+      // Prepend polyfills and shims before code
       !env.production && 'source-map-support/register',
       !env.production && !env.web && 'dotenv/config',
       '@babel/polyfill',
       'promise-polyfill/dist/polyfill',
+      // Include style.css in web only
       env.web && './src/style',
+      // Main entrypoint is index.(node|web).ts
       './src/index',
-    ].filter(x => x)
+    ].filter(Boolean)
   },
   devtool: !env.production && 'source-map',
   devServer: {
@@ -50,7 +55,7 @@ export default (env = {}) => ({
       env.production && new OptimizeCSSAssetsPlugin({
         canPrint: true,
       }),
-    ].filter(x => x),
+    ].filter(Boolean),
   },
   plugins: [
     env.web && new HtmlWebpackPlugin({
@@ -71,7 +76,7 @@ export default (env = {}) => ({
     }),
     env.web && new MiniCssExtractPlugin(),
     ! env.web && new NodemonPlugin(),
-  ].filter(x => x),
+  ].filter(Boolean),
   output: {
     path: path.resolve(__dirname, env.web ? './web' : './dist'),
     filename: '[name].js',
@@ -88,12 +93,10 @@ export default (env = {}) => ({
     ],
   },
   target: env.web ? 'web' : 'node',
-  node: {
-    __dirname: false,
-    __filename: false,
+  node: env.web && {
     fs: 'empty',
   },
   externals: [
-    !env.web && nodeExternals(),
-  ].filter(x => x),
+    !env.web && nodeExternals(), // exclude all node_modules in server mode only
+  ].filter(Boolean),
 });
