@@ -4,6 +4,6 @@ COPY . /app
 
 WORKDIR /app
 
-RUN ["/bin/sh", "-e", "-c", "yarn install && yarn test && yarn build"]
+RUN ["/bin/sh", "-e", "-c", "yarn install && yarn build"]
 
 CMD ["yarn", "start"]
