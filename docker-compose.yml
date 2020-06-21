@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  camera-challenge:
+    build: .
+    ports:
+      - '8080'
+    environment:
+      - TZ=Europe/Berlin
+      - NODE_RCPT
+
+  web:
+    image: linuxserver/letsencrypt
+    ports:
+      - '${PREFIX}80:80'
+      - '${PREFIX}443:443'
+    volumes:
+      - web-data:/config
+      - ./camera-challenge.subdomain.conf:/config/nginx/proxy-confs/camera-challenge.subdomain.conf:ro
+      - ./.htpasswd:/config/nginx/.htpasswd:ro
+    environment:
+      - TZ=Europe/Berlin
+      - URL=camera-challenge.simonsystem.de
+      - STAGING=false
+
+volumes:
+  web-data:
